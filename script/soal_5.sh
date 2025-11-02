@@ -1,0 +1,162 @@
+
+# a. ERENDIS
+
+# 1. update zone file dengan CNAME, PTR, dan TXT records
+cat > /etc/bind/jarkom/K11.com << 'EOF'
+;
+; BIND data file for K11.com - Updated with CNAME, TXT
+;
+$TTL    604800
+@       IN      SOA     K11.com. root.K11.com. (
+                              2024110202    ; Serial (INCREMENT!)
+                              604800        ; Refresh
+                              86400         ; Retry
+                              2419200       ; Expire
+                              604800 )      ; Negative Cache TTL
+;
+; Name servers
+@           IN      NS      ns1.K11.com.
+@           IN      NS      ns2.K11.com.
+
+; A records untuk name servers
+ns1         IN      A       10.69.3.2    ; Erendis
+ns2         IN      A       10.69.4.5    ; Amdir
+
+; A records untuk domain utama
+@           IN      A       10.69.3.2    ; K11.com → Erendis
+
+; CNAME - Alias www
+www         IN      CNAME   @            ; www.K11.com → K11.com
+
+; A records untuk semua lokasi penting
+palantir    IN      A       10.69.4.2
+elros       IN      A       10.69.1.6
+pharazon    IN      A       10.69.2.6
+elendil     IN      A       10.69.1.2
+isildur     IN      A       10.69.1.3
+anarion     IN      A       10.69.1.4
+galadriel   IN      A       10.69.2.2
+celeborn    IN      A       10.69.2.3
+oropher     IN      A       10.69.2.4
+
+; TXT Records - Pesan Rahasia
+Cincin-Sauron       IN      TXT     "Lokasi: elros.K11.com (10.69.1.6)"
+Aliansi-Terakhir    IN      TXT     "Lokasi: pharazon.K11.com (10.69.2.6)"
+EOF
+
+
+# 2. restart BIND9
+service bind9 restart
+
+# 3. Test CNAME
+nslookup www.K11.com
+
+# 4. Test TXT records
+dig Cincin-Sauron.K11.com TXT
+dig Aliansi-Terakhir.K11.com TXT
+
+# b. ERENDIS (setup reverse DNS)
+
+# 1. Tambahkan reverse zone untuk subnet 10.69.3.0/24 (Erendis)
+cat >> /etc/bind/named.conf.local << 'EOF'
+
+// Reverse zone untuk 10.69.3.0/24
+zone "3.69.10.in-addr.arpa" {
+    type master;
+    file "/etc/bind/jarkom/3.69.10.in-addr.arpa";
+    allow-transfer { 10.69.4.5; };
+};
+EOF
+
+# 2. Buat reverse zone file untuk 10.69.3.0/24
+cat > /etc/bind/jarkom/3.69.10.in-addr.arpa << 'EOF'
+;
+; Reverse DNS zone for 10.69.3.0/24
+;
+$TTL    604800
+@       IN      SOA     K11.com. root.K11.com. (
+                              2024110201    ; Serial
+                              604800        ; Refresh
+                              86400         ; Retry
+                              2419200       ; Expire
+                              604800 )      ; Negative Cache TTL
+;
+@       IN      NS      ns1.K11.com.
+@       IN      NS      ns2.K11.com.
+
+; PTR Records
+2       IN      PTR     ns1.K11.com.     ; 10.69.3.2 → ns1.K11.com (Erendis)
+EOF
+
+# 3. Tambahkan reverse zone untuk subnet 10.69.4.0/24 (Amdir)
+cat >> /etc/bind/named.conf.local << 'EOF'
+
+// Reverse zone untuk 10.69.4.0/24
+zone "4.69.10.in-addr.arpa" {
+    type master;
+    file "/etc/bind/jarkom/4.69.10.in-addr.arpa";
+    allow-transfer { 10.69.4.5; };
+};
+EOF
+
+# 4. Buat reverse zone file untuk 10.69.4.0/24
+cat > /etc/bind/jarkom/4.69.10.in-addr.arpa << 'EOF'
+;
+; Reverse DNS zone for 10.69.4.0/24
+;
+$TTL    604800
+@       IN      SOA     K11.com. root.K11.com. (
+                              2024110201    ; Serial
+                              604800        ; Refresh
+                              86400         ; Retry
+                              2419200       ; Expire
+                              604800 )      ; Negative Cache TTL
+;
+@       IN      NS      ns1.K11.com.
+@       IN      NS      ns2.K11.com.
+
+; PTR Records
+5       IN      PTR     ns2.K11.com.     ; 10.69.4.5 → ns2.K11.com (Amdir)
+EOF
+
+# 5. Cek syntax
+named-checkconf
+named-checkzone 3.69.10.in-addr.arpa /etc/bind/jarkom/3.69.10.in-addr.arpa
+named-checkzone 4.69.10.in-addr.arpa /etc/bind/jarkom/4.69.10.in-addr.arpa
+
+# 6. Restart BIND9
+service bind9 restart
+
+# 7. Test PTR
+dig -x 10.69.3.2
+dig -x 10.69.4.5
+
+#c. AMDIR (menerima semua perubahan)
+
+# 1. Tambahkan reverse zones di slave
+cat >> /etc/bind/named.conf.local << 'EOF'
+
+// Reverse zone untuk 10.69.3.0/24 (Slave)
+zone "3.69.10.in-addr.arpa" {
+    type slave;
+    masters { 10.69.3.2; };
+    file "/var/lib/bind/3.69.10.in-addr.arpa";
+};
+
+// Reverse zone untuk 10.69.4.0/24 (Slave)
+zone "4.69.10.in-addr.arpa" {
+    type slave;
+    masters { 10.69.3.2; };
+    file "/var/lib/bind/4.69.10.in-addr.arpa";
+};
+EOF
+
+# 2. Restart BIND9
+service bind9 restart
+
+# 3. Cek transfer
+ls -la /var/lib/bind/
+
+# 4. Test
+dig Cincin-Sauron.K11.com TXT @127.0.0.1
+dig -x 10.69.3.2 @127.0.0.1
