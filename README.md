@@ -34,6 +34,10 @@ ping durin ke palantir
 
 ## SOAL 2
 
+RESTART
+
+<img width="784" height="346" alt="image" src="https://github.com/user-attachments/assets/5943a602-74ad-4c9a-9ae5-f9284c770a67" />
+
 ALDARION
 
 <img width="840" height="160" alt="image" src="https://github.com/user-attachments/assets/6b3fc468-48d2-43da-b21e-333283dfd3e7" />
@@ -41,4 +45,32 @@ ALDARION
 DURIN
 
 <img width="814" height="188" alt="image" src="https://github.com/user-attachments/assets/e94ae2a6-2d0a-4e8d-802c-e1be1241a46d" />
+
+
+STATUS DURIN 
+
+<img width="733" height="256" alt="image" src="https://github.com/user-attachments/assets/f503627b-f9a2-4b58-8a42-988c9b3562f7" />
+
+
+- Testing Gilgalad
+<img width="1656" height="155" alt="image" src="https://github.com/user-attachments/assets/a82c5065-0aad-495a-90e2-aeb8127454f7" />
+
+<img width="714" height="89" alt="image" src="https://github.com/user-attachments/assets/24cfa4e9-141f-4cf2-a3eb-7dcf2d0316db" />
+
+<img width="1126" height="585" alt="image" src="https://github.com/user-attachments/assets/0e4c7bb6-815b-4459-a3f9-46c426bd9821" />
+
+- Testing Amandil
+<img width="1722" height="155" alt="image" src="https://github.com/user-attachments/assets/9fbf07a4-74de-4108-9454-810a3d95f68a" />
+
+<img width="599" height="96" alt="image" src="https://github.com/user-attachments/assets/aa234d33-0d2f-4c59-b2ea-b470f79cac2b" />
+
+<img width="1027" height="329" alt="image" src="https://github.com/user-attachments/assets/d9135ed8-bc05-4c18-a5a3-a860a8475f9d" />
+
+- Testing Khamul
+
+<img width="1678" height="157" alt="image" src="https://github.com/user-attachments/assets/1190bcde-6775-4c56-846a-fb79113f0bc5" />
+
+<img width="606" height="94" alt="image" src="https://github.com/user-attachments/assets/95c34766-d128-4083-9aa6-c5138b610355" />
+
+<img width="1003" height="326" alt="image" src="https://github.com/user-attachments/assets/eb747fd1-f396-4726-b597-07787e17aa17" />
 
