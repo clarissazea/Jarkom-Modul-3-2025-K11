@@ -180,62 +180,72 @@ nslookup palantir.K11.com 10.69.3.3
 - Test CNAME
 nslookup www.K11.com
 
-<img width="926" height="243" alt="image" src="https://github.com/user-attachments/assets/467f7582-cdda-472c-82e0-41232daa9fc8" />
+<img width="948" height="267" alt="image" src="https://github.com/user-attachments/assets/adea7a3b-0867-4be8-971c-3b96203afe7f" />
+
 
 - Test TXT 
 
-dig Cincin-Sauron.K11.com TXT
+dig Cincin-Sauron.K11.com TXT @10.69.3.2
 
-<img width="1796" height="587" alt="image" src="https://github.com/user-attachments/assets/ed6669df-a76d-485a-84ab-70ce4cdca2fb" />
+<img width="1349" height="663" alt="image" src="https://github.com/user-attachments/assets/cf5c8599-7c77-4b31-9957-58eb882d8156" />
 
-dig Aliansi-Terakhir.K11.com TXT
 
-<img width="1772" height="595" alt="image" src="https://github.com/user-attachments/assets/349b16aa-09be-4763-96fe-4141e1838b21" />
+dig Aliansi-Terakhir.K11.com TXT @10.69.3.2
+
+<img width="1393" height="667" alt="image" src="https://github.com/user-attachments/assets/46380104-831f-41cb-8101-b2d60536fbca" />
+
 
 - Cek syntax
 named-checkconf
 named-checkzone 3.69.10.in-addr.arpa /etc/bind/jarkom/3.69.10.in-addr.arpa
 named-checkzone 4.69.10.in-addr.arpa /etc/bind/jarkom/4.69.10.in-addr.arpa
 
-<img width="1319" height="207" alt="image" src="https://github.com/user-attachments/assets/02706dd0-edef-4a14-b6b3-151b19d54112" />
+<img width="1224" height="301" alt="image" src="https://github.com/user-attachments/assets/33c78166-312c-44e5-9e1c-b9bf16aaa87d" />
+
 
 - Test PTR
-dig -x 10.69.3.2
+  
+Uji PTR untuk Erendis (10.69.3.2)
+dig -x 10.69.3.2 @10.69.3.2
 
-<img width="1361" height="574" alt="image" src="https://github.com/user-attachments/assets/5ebbd1b4-3d73-4387-9d10-662798a45f99" />
+<img width="1172" height="643" alt="image" src="https://github.com/user-attachments/assets/edcd5c3c-0612-4b77-a093-1b13022dd298" />
 
-dig -x 10.69.3.3
 
-<img width="1362" height="583" alt="image" src="https://github.com/user-attachments/assets/01140515-53cd-4ff6-a5dc-dc8a98c0aebd" />
+Uji PTR untuk Amdir (10.69.3.3)
+dig -x 10.69.3.3 @10.69.3.2
+
+<img width="1220" height="658" alt="image" src="https://github.com/user-attachments/assets/a2a07b24-9c5c-4e40-93e7-de2f8440fc2a" />
+
+Uji PTR untuk Palantir (10.69.4.2)
+dig -x 10.69.4.2 @10.69.3.2
+
+<img width="1230" height="665" alt="image" src="https://github.com/user-attachments/assets/a515e557-8e22-4f57-b529-d5aa9e3c1a92" />
 
 
 
 DI AMDIR
 
-<img width="975" height="220" alt="image" src="https://github.com/user-attachments/assets/91ccfbb5-19d1-4293-b5f6-6a8e2c1599d0" />
+
+<img width="1256" height="512" alt="image" src="https://github.com/user-attachments/assets/4bf7b42b-f882-405b-8a29-104c0b1df453" />
+
+Cek transfer
+
+ls -la /var/lib/bind/
+
+<img width="1049" height="215" alt="image" src="https://github.com/user-attachments/assets/2509dd53-8856-410b-bcba-12890b701399" />
 
 
 cincin
 
-<img width="1315" height="653" alt="image" src="https://github.com/user-attachments/assets/31ed4500-6d80-4a30-8909-f2583e2094f0" />
+<img width="1337" height="654" alt="image" src="https://github.com/user-attachments/assets/e9821cf2-80a6-4ce9-8ff3-771c452dfe9f" />
 
-aliansi terakhir
+dig www.K11.com @127.0.0.1
 
-<img width="1377" height="656" alt="image" src="https://github.com/user-attachments/assets/bc07cfac-6520-431f-8525-24f55e0d7aa3" />
+<img width="1162" height="695" alt="image" src="https://github.com/user-attachments/assets/40cac76e-aca5-4859-8a84-1a1a4a9029e2" />
 
-tes dig 
+dig -x 10.69.3.2 @127.0.0.1
 
-<img width="1117" height="658" alt="image" src="https://github.com/user-attachments/assets/f99b01bc-efce-4d18-8fa2-d86cde28dfc5" />
-
-
-
-
-# baruuu soal 5
-
-<img width="975" height="92" alt="image" src="https://github.com/user-attachments/assets/259f7966-453f-4ab2-88b1-b39604b1140b" />
-
-
-<img width="1350" height="173" alt="image" src="https://github.com/user-attachments/assets/d4017b87-3a8b-47a5-ab6d-bccf73c81db2" />
+<img width="1127" height="652" alt="image" src="https://github.com/user-attachments/assets/40b63d1f-b248-4e85-8b04-b5fa35828499" />
 
 
 
