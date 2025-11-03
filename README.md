@@ -121,3 +121,20 @@ c. Test di Gilgalad/Amandil/Khamul (setelah dapat IP dari DHCP)
   
 <img width="575" height="127" alt="image" src="https://github.com/user-attachments/assets/40f36d1e-c9d1-42a3-81bb-b934c9787a45" />
 
+
+
+## SOAL 4
+
+named-checkconf
+named-checkzone K11.com /etc/bind/jarkom/K11.com
+
+<img width="1103" height="127" alt="image" src="https://github.com/user-attachments/assets/668b5cf9-4666-4835-b1df-352314278f05" />
+
+
+tes nslookup palantir.K11.com 127.0.0.1
+
+<img width="811" height="190" alt="image" src="https://github.com/user-attachments/assets/583db0f2-d23b-4a68-b43e-d674c57bf6d2" />
+
+tes nslookup elros.K11.com 127.0.0.1
+
+<img width="763" height="282" alt="image" src="https://github.com/user-attachments/assets/5e790e3b-f4f9-4b94-8cea-5f3d2365986b" />
