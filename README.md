@@ -228,5 +228,16 @@ tes dig
 <img width="1117" height="658" alt="image" src="https://github.com/user-attachments/assets/f99b01bc-efce-4d18-8fa2-d86cde28dfc5" />
 
 
+
+
+# baruuu soal 5
+
+<img width="975" height="92" alt="image" src="https://github.com/user-attachments/assets/259f7966-453f-4ab2-88b1-b39604b1140b" />
+
+
+<img width="1350" height="173" alt="image" src="https://github.com/user-attachments/assets/d4017b87-3a8b-47a5-ab6d-bccf73c81db2" />
+
+
+
 # SOAL 6
 
