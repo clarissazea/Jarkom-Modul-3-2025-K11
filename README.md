@@ -138,3 +138,10 @@ tes nslookup palantir.K11.com 127.0.0.1
 tes nslookup elros.K11.com 127.0.0.1
 
 <img width="763" height="282" alt="image" src="https://github.com/user-attachments/assets/5e790e3b-f4f9-4b94-8cea-5f3d2365986b" />
+
+
+
+di amdir
+
+<img width="840" height="148" alt="image" src="https://github.com/user-attachments/assets/502a1c6c-c68d-4202-b371-fe06d654be69" />
+
