@@ -279,5 +279,11 @@ ISILDUR
 
 ANARION
 
+<img width="1087" height="310" alt="image" src="https://github.com/user-attachments/assets/221ddc38-3b50-47d4-b7df-42fb5a3692bd" />
+
+
 <img width="894" height="129" alt="image" src="https://github.com/user-attachments/assets/b5fefc10-9628-4c64-b3e0-20f825f9499a" />
+
+
+<img width="1532" height="165" alt="image" src="https://github.com/user-attachments/assets/a8e6b829-9389-4fde-b403-2e059aaef49b" />
 
