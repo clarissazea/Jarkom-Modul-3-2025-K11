@@ -94,12 +94,15 @@ dig google.com @127.0.0.1
 b. test di elendil
 
 nslookup google.com
+
 <img width="556" height="639" alt="image" src="https://github.com/user-attachments/assets/cbe518a2-ebba-4a88-85b2-fa6de4a89cb7" />
 
 dig google.com
+
 <img width="886" height="621" alt="image" src="https://github.com/user-attachments/assets/35e5bf6e-b98d-4620-81c8-71ab581f3105" />
 
 ping -c 3 google.com
+
 <img width="1039" height="247" alt="image" src="https://github.com/user-attachments/assets/9d45fbde-fc89-4d8f-96f9-bbb4afba030d" />
 
 
@@ -111,8 +114,10 @@ c. Test di Gilgalad/Amandil/Khamul (setelah dapat IP dari DHCP)
 <img width="636" height="100" alt="image" src="https://github.com/user-attachments/assets/e7c36bb6-5514-4002-a422-685a44f84499" />
 
 - Amandil
+  
 <img width="604" height="100" alt="image" src="https://github.com/user-attachments/assets/9d19d6b4-cfca-48ee-82c1-d49b95a0b7a2" />
 
 - khamul
+  
 <img width="575" height="127" alt="image" src="https://github.com/user-attachments/assets/40f36d1e-c9d1-42a3-81bb-b934c9787a45" />
 
