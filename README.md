@@ -174,3 +174,59 @@ nslookup palantir.K11.com 10.69.3.3
 
 <img width="829" height="402" alt="image" src="https://github.com/user-attachments/assets/668d33e4-4d23-439f-a3bc-f06b5eccceea" />
 
+
+# SOAL 5
+
+- Test CNAME
+nslookup www.K11.com
+
+<img width="926" height="243" alt="image" src="https://github.com/user-attachments/assets/467f7582-cdda-472c-82e0-41232daa9fc8" />
+
+- Test TXT 
+
+dig Cincin-Sauron.K11.com TXT
+
+<img width="1796" height="587" alt="image" src="https://github.com/user-attachments/assets/ed6669df-a76d-485a-84ab-70ce4cdca2fb" />
+
+dig Aliansi-Terakhir.K11.com TXT
+
+<img width="1772" height="595" alt="image" src="https://github.com/user-attachments/assets/349b16aa-09be-4763-96fe-4141e1838b21" />
+
+- Cek syntax
+named-checkconf
+named-checkzone 3.69.10.in-addr.arpa /etc/bind/jarkom/3.69.10.in-addr.arpa
+named-checkzone 4.69.10.in-addr.arpa /etc/bind/jarkom/4.69.10.in-addr.arpa
+
+<img width="1319" height="207" alt="image" src="https://github.com/user-attachments/assets/02706dd0-edef-4a14-b6b3-151b19d54112" />
+
+- Test PTR
+dig -x 10.69.3.2
+
+<img width="1361" height="574" alt="image" src="https://github.com/user-attachments/assets/5ebbd1b4-3d73-4387-9d10-662798a45f99" />
+
+dig -x 10.69.3.3
+
+<img width="1362" height="583" alt="image" src="https://github.com/user-attachments/assets/01140515-53cd-4ff6-a5dc-dc8a98c0aebd" />
+
+
+
+DI AMDIR
+
+<img width="975" height="220" alt="image" src="https://github.com/user-attachments/assets/91ccfbb5-19d1-4293-b5f6-6a8e2c1599d0" />
+
+
+cincin
+
+<img width="1315" height="653" alt="image" src="https://github.com/user-attachments/assets/31ed4500-6d80-4a30-8909-f2583e2094f0" />
+
+aliansi terakhir
+
+<img width="1377" height="656" alt="image" src="https://github.com/user-attachments/assets/bc07cfac-6520-431f-8525-24f55e0d7aa3" />
+
+tes dig 
+
+<img width="1117" height="658" alt="image" src="https://github.com/user-attachments/assets/f99b01bc-efce-4d18-8fa2-d86cde28dfc5" />
+
+
+# SOAL 6
+
