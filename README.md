@@ -255,3 +255,29 @@ dig -x 10.69.3.2 @127.0.0.1
 
 
 # SOAL 7
+
+<img width="1041" height="311" alt="image" src="https://github.com/user-attachments/assets/b28508e6-7adf-4ff7-8f0a-ecbd38bf2ef1" />
+
+<img width="1769" height="1061" alt="image" src="https://github.com/user-attachments/assets/30a51fdd-fe68-4533-9c79-402df2ed45e9" />
+
+
+<img width="700" height="90" alt="image" src="https://github.com/user-attachments/assets/48f2dd36-7f25-4efa-b64e-b1bf1067e163" />
+
+<img width="867" height="171" alt="image" src="https://github.com/user-attachments/assets/4a56c668-f904-4a8d-a8df-c229c5af6041" />
+
+
+ISILDUR
+
+<img width="1126" height="308" alt="image" src="https://github.com/user-attachments/assets/5d98d233-bb60-4278-9c9a-ed3fade7a9f1" />
+
+
+<img width="953" height="117" alt="image" src="https://github.com/user-attachments/assets/4bcdfb99-38d2-475e-8129-2fdc284c27a0" />
+
+
+<img width="1591" height="162" alt="image" src="https://github.com/user-attachments/assets/257543a6-8e0d-461c-8737-57e66eea36a6" />
+
+
+ANARION
+
+<img width="894" height="129" alt="image" src="https://github.com/user-attachments/assets/b5fefc10-9628-4c64-b3e0-20f825f9499a" />
+
