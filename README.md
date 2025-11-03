@@ -141,7 +141,36 @@ tes nslookup elros.K11.com 127.0.0.1
 
 
 
-di amdir
 
-<img width="840" height="148" alt="image" src="https://github.com/user-attachments/assets/502a1c6c-c68d-4202-b371-fe06d654be69" />
+
+
+`di amdir`
+
+<img width="1188" height="544" alt="image" src="https://github.com/user-attachments/assets/d7ce2a75-72b4-4337-b79d-203f6a1ba8a6" />
+
+
+<img width="795" height="193" alt="image" src="https://github.com/user-attachments/assets/50a2970e-704c-4b4b-93d0-30b546ab5fca" />
+
+
+`test dari client` (elendil)
+
+
+1. Test query ke Erendis (Master)
+nslookup palantir.K11.com 10.69.3.2
+
+2. Test query ke Amdir (Slave)
+nslookup palantir.K11.com 10.69.3.3
+
+<img width="936" height="395" alt="image" src="https://github.com/user-attachments/assets/5b9104e9-90e3-4392-8d4d-acfa09c12544" />
+
+`test dari client` (elros)
+
+
+1. Test query ke Erendis (Master)
+nslookup palantir.K11.com 10.69.3.2
+
+2. Test query ke Amdir (Slave)
+nslookup palantir.K11.com 10.69.3.3
+
+<img width="829" height="402" alt="image" src="https://github.com/user-attachments/assets/668d33e4-4d23-439f-a3bc-f06b5eccceea" />
 
