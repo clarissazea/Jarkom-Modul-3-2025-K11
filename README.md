@@ -251,3 +251,7 @@ dig -x 10.69.3.2 @127.0.0.1
 
 # SOAL 6
 
+<img width="858" height="130" alt="image" src="https://github.com/user-attachments/assets/2b116752-8574-42e8-8190-914d0934499b" />
+
+
+# SOAL 7
