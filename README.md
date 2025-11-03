@@ -287,3 +287,6 @@ ANARION
 
 <img width="1532" height="165" alt="image" src="https://github.com/user-attachments/assets/a8e6b829-9389-4fde-b403-2e059aaef49b" />
 
+
+<img width="1905" height="1078" alt="image" src="https://github.com/user-attachments/assets/c2dafd80-d76a-4bcd-a936-f98b6ea85672" />
+
