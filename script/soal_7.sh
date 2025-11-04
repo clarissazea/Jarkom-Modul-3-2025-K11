@@ -88,6 +88,8 @@ cp .env.example .env
 # 6. Generate application key
 php artisan key:generate
 
+php artisan serve
+
 # 7. Setup database di .env secara otomatis
 # Database di Palantir (10.69.4.2)
 sed -i 's/DB_HOST=127.0.0.1/DB_HOST=10.69.4.2/' /var/www/laravel/.env

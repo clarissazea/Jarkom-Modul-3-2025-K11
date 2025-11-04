@@ -6,12 +6,9 @@
 cat > soal_5.sh << EOFS
 #!/bin/bash
 cat > /etc/bind/jarkom/K11.com << 'EOF'
-;
-; BIND data file for K11.com - Updated with CNAME, TXT
-;
-$TTL    604800
-@       IN      SOA     K11.com. root.K11.com. (
-                              2024110202    ; Serial (INCREMENT!)
+\$TTL    604800
+@    IN   SOA   K11.com. root.K11.com. (
+                              2024110204    ; Serial (INCREMENT!)
                               604800        ; Refresh
                               86400         ; Retry
                               2419200       ; Expire
@@ -26,10 +23,10 @@ ns1         IN      A       10.69.3.2    ; Erendis
 ns2         IN      A       10.69.3.3    ; Amdir
 
 ; A records untuk domain utama
-@           IN      A       10.69.3.2    ; K11.com → Erendis
+@           IN      A       10.69.3.2    ; 
 
 ; CNAME - Alias www
-www         IN      CNAME   @            ; www.K11.com → K11.com
+www         IN      A       10.69.3.2    ; www.K11.com → K11.com
 
 ; A records untuk semua lokasi penting
 palantir    IN      A       10.69.4.2

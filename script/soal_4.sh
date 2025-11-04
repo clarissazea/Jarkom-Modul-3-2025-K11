@@ -3,8 +3,6 @@
 
 # jangan lupa ganti erendis dan amdir
 
-cat > soal_4.sh << EOFS
-#!/bin/bash
 
 cat > /etc/resolv.conf << 'EOF'
 nameserver 10.69.5.2
@@ -33,9 +31,9 @@ mkdir -p /etc/bind/jarkom
 
 # 4. bikin zone file K11.com
 cat > /etc/bind/jarkom/K11.com << 'EOF'
-;
+
 ; BIND data file for K11.com
-;
+
 $TTL    604800
 @       IN      SOA     K11.com. root.K11.com. (
                               2024110201    ; Serial (YYYYMMDDNN)
@@ -82,15 +80,15 @@ options {
 };
 EOF
 
-# 6. cek syntax konfigurasi
-named-checkconf
-named-checkzone K11.com /etc/bind/jarkom/K11.com
+
 
 # 7. restart
 ln -s /etc/init.d/named /etc/init.d/bind9
 service bind9 start
 
-EOFS
+# 6. cek syntax konfigurasi
+named-checkconf
+named-checkzone K11.com /etc/bind/jarkom/K11.com
 
 # 8. test
 # nslookup palantir.K11.com 127.0.0.1
@@ -102,8 +100,6 @@ EOFS
 # langkah sama kaya di ERENDIS, tapi ini buat SLAVE DNS
 
 
-cat > soal_4.sh << EOFS
-#!/bin/bash
 
 cat > /etc/resolv.conf << 'EOF'
 nameserver 10.69.5.2
@@ -147,7 +143,6 @@ EOF
 ln -s /etc/init.d/named /etc/init.d/bind9
 service bind9 restart
 
-EOFS
 
 # 5. cek syntaxnya
 named-checkconf
@@ -170,8 +165,18 @@ nameserver 10.69.3.3
 EOF
 
 # 1. Test query ke Erendis (Master)
+ping isildur.K11.com
+
+
 ping palantir.K11.com
 dig palantir.K11.com 
+
+
+# kl gabisa
+masuk ke /etc/hosts
+tambahin: 
+
+ip 10.69.4.2 palantir.K11.com
 
 # 3. Test semua A records
 ping elros.K11.com
