@@ -253,6 +253,10 @@ dig -x 10.69.3.2 @127.0.0.1
 
 <img width="858" height="130" alt="image" src="https://github.com/user-attachments/assets/2b116752-8574-42e8-8190-914d0934499b" />
 
+<img width="1678" height="736" alt="image" src="https://github.com/user-attachments/assets/642e2a96-acd8-4016-845d-030c07073b2d" />
+
+<img width="1708" height="647" alt="image" src="https://github.com/user-attachments/assets/3564deb8-52d0-4737-a405-896e7556cda6" />
+
 
 # SOAL 7
 
