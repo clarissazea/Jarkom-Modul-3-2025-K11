@@ -1,6 +1,12 @@
 
 # a. SETUP LARAVEL WORKERS (jalankan di Elendil, Isildur, Anarion)
 
+# jangan lupa ganti 
+cat > /etc/resolv.conf << 'EOF'
+nameserver 10.69.5.2
+EOF
+
+
 # 1. update repo 
 apt-get update
 
@@ -23,6 +29,19 @@ curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin
 # 7. install Git & unzip
 apt-get install -y git unzip
 
+
+# install cepat
+apt-get update
+apt-get install -y lsb-release ca-certificates apt-transport-https software-properties-common gnupg2
+curl -sSL https://packages.sury.org/php/README.txt | bash -x
+apt-get update
+apt-get install -y php8.4 php8.4-fpm php8.4-cli php8.4-common php8.4-mysql php8.4-xml php8.4-curl php8.4-mbstring php8.4-zip php8.4-gd php8.4-intl php8.4-bcmath
+apt-get install -y nginx
+curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+apt-get install -y git unzip
+
+
+
 # 8. Verifikasi instalasi
 php -v
 composer --version
@@ -42,7 +61,20 @@ git clone https://github.com/sofronz/simple-rest-api.git laravel
 cd /var/www/laravel
 
 # 3. Install dependencies dengan Composer
+
+curl -sS https://getcomposer.org/installer | php
+
 composer install
+
+# kl gabisa:
+
+rm -f /usr/local/bin/composer
+mv /var/www/laravel/composer.phar /usr/local/bin/composer
+chmod +x /usr/local/bin/composer
+composer --version
+cd /var/www/laravel
+composer install
+
 
 # 4. Setup permissions
 chown -R www-data:www-data /var/www/laravel
@@ -56,14 +88,19 @@ cp .env.example .env
 # 6. Generate application key
 php artisan key:generate
 
-# 7. Setup database di .env 
+# 7. Setup database di .env secara otomatis
+# Database di Palantir (10.69.4.2)
+sed -i 's/DB_HOST=127.0.0.1/DB_HOST=10.69.4.2/' /var/www/laravel/.env
+sed -i 's/DB_DATABASE=laravel/DB_DATABASE=K11_db/' /var/www/laravel/.env
+sed -i 's/DB_USERNAME=root/DB_USERNAME=K11_user/' /var/www/laravel/.env
+sed -i 's/DB_PASSWORD=/DB_PASSWORD=K11_password/' /var/www/laravel/.env
+
+
 nano /var/www/laravel/.env
 # DB_HOST=10.69.4.2
 # DB_DATABASE=K11_db
 # DB_USERNAME=K11_user
 # DB_PASSWORD=K11_password
-
-
 
 # c. KONFIGURASI NGINX untuk Laravel
 
@@ -98,6 +135,12 @@ server {
     access_log /var/log/nginx/laravel_access.log;
 }
 EOF
+
+# --- ULANGI UNTUK ISILDUR (10.69.1.3) ---
+# Ubah server_name: isildur.K11.com 10.69.1.3
+
+# --- ULANGI UNTUK ANARION (10.69.1.4) ---
+# Ubah server_name: anarion.K11.com 10.69.1.4
 
 # 1. Enable site
 ln -s /etc/nginx/sites-available/laravel /etc/nginx/sites-enabled/

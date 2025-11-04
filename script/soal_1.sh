@@ -232,9 +232,9 @@ iface lo inet loopback
 
 auto eth0
 iface eth0 inet static
-    address 10.69.4.5
+    address 10.69.3.3
     netmask 255.255.255.0
-    gateway 10.69.4.1
+    gateway 10.69.3.1
     dns-nameservers 192.168.122.1
 
 

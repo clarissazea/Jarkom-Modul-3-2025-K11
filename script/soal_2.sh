@@ -1,5 +1,7 @@
 # a. ALDARION (IP: 10.69.4.4)
 
+cat > soal_2.sh << EOFS
+#!/bin/bash
 # 1. update dan install DHCP Server
 apt-get update
 apt-get install isc-dhcp-server -y
@@ -93,10 +95,20 @@ dhcpd -t -cf /etc/dhcp/dhcpd.conf
 # 6. restart DHCP Server
 service isc-dhcp-server restart
 
+EOFS
+
 # 7. cek status
 service isc-dhcp-server status
 
+
+
+
+
+
 # b. DURIN
+
+cat > soal_2.sh << EOFS
+#!/bin/bash
 
 # 1. Install DHCP Relay
 apt-get update
@@ -119,5 +131,58 @@ EOF
 # 3. Restart DHCP Relay
 service isc-dhcp-relay restart
 
+EOFS
+
+
 # 4. Cek status
 service isc-dhcp-relay status
+
+
+
+# c. TESTING 
+
+# 1. Gilgalad
+
+# Cek IP yang didapat
+ip a show eth0
+
+# Harus dapat IP di range:
+# - 10.69.2.35 - 10.69.2.67 ATAU
+# - 10.69.2.96 - 10.69.2.121
+
+# Cek DNS yang didapat
+cat /etc/resolv.conf
+# Harus ada: nameserver 10.69.5.2
+
+# Test koneksi
+ping -c 3 10.69.2.1   # Gateway
+ping -c 3 10.69.4.4   # Aldarion (DHCP Server)
+
+# 2. Amandil
+
+ip a show eth0
+
+# Harus dapat IP di range:
+# - 10.69.1.6 - 10.69.1.34 ATAU
+# - 10.69.1.68 - 10.69.1.94
+
+cat /etc/resolv.conf
+# Harus ada: nameserver 10.69.5.2
+
+ping -c 3 10.69.1.1   # Gateway
+
+# 3. Khamul
+
+# MAC Address
+ip link show eth0 | grep ether
+# Harus: 02:00:00:00:00:01
+
+# Cek IP
+ip a show eth0
+
+# HARUS dapat IP: 10.69.3.95 (FIXED!)
+
+cat /etc/resolv.conf
+# Harus ada: nameserver 10.69.5.2
+
+ping -c 3 10.69.3.1   # Gateway

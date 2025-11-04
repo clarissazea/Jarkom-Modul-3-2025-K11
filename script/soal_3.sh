@@ -1,6 +1,8 @@
 
 # a. MINATSIR (IP: 10.69.5.2)
 
+cat > soal_3.sh << EOFS
+#!/bin/bash
 # 1. Update dan nstall bind9
 apt-get update
 apt-get install bind9 bind9utils dnsutils -y
@@ -15,9 +17,16 @@ options {
     
     # Forwarder ke Valinor/Internet (192.168.122.1)
     forwarders {
+        10.69.3.2;
+        10.69.3.3;
         192.168.122.1;
+
     };
-    
+    forward only;
+
+    # DNSSEC validation
+    dnssec-validation no;
+
     # Allow query dari semua network internal
     allow-query { any; };
     
@@ -33,29 +42,45 @@ options {
     # Tidak authoritative untuk domain apapun
     auth-nxdomain no;
     
-    # DNSSEC validation
-    dnssec-validation auto;
-    
-    # Allow transfer untuk DNS Slave (Amdir)
-    allow-transfer { 10.69.4.5; };
+};
+EOF
+
+cat > /etc/bind/named.conf.local << 'EOF'
+
+zone "K11.com" {
+    type forward;
+    forward only;
+    forwarders {
+        10.69.3.2;  
+        10.69.3.3;
+        192.168.122.1;
+        };
 };
 EOF
 
 # 4. Restart 
-service bind9 restart
+ln -s /etc/init.d/named /etc/init.d/bind9
+
+service bind9 start
+
+EOFS
+
 
 service bind9 status
 
 # 5. Test DNS dari minatsir sendiri
-nslookup google.com 127.0.0.1
 dig google.com @127.0.0.1
 
 
 
-# b. Jalankan ini di setiap node (ganti nameservernya)
+# b. Jalankan ini di setiap node (ganti nameservernya kecuali durin & minatsir) (Elendil, Isildur, Anarion, Galadriel, Celeborn, dll)
+
 cat > /etc/resolv.conf << 'EOF'
 nameserver 10.69.5.2
 EOF
+
+
+
 
 # c. Test di Elendil
 
@@ -63,16 +88,14 @@ EOF
 cat /etc/resolv.conf
 # Output: nameserver 10.69.5.2
 
-# 2. Test nslookup
-nslookup google.com
-# Server: 10.69.5.2
-# Address: 10.69.5.2#53
-
-# 3. Test dig
+# 2. Test dig
 dig google.com
 
-# 4. Test ping domain
+# 3. Test ping domain
 ping -c 3 google.com
+
+
+
 
 # d. Test di Gilgalad/Amandil/Khamul
 # Setelah dapat IP dari DHCP, cek:

@@ -1,11 +1,8 @@
 
 # a. ERENDIS (10.69.3.2)
-
-# jangan lupa ganti erendis dan amdir
-
 cat > soal_4.sh << EOFS
 #!/bin/bash
-
+# jangan lupa ganti erendis dan amdir
 cat > /etc/resolv.conf << 'EOF'
 nameserver 10.69.5.2
 nameserver 10.69.3.2
@@ -101,17 +98,11 @@ EOFS
 # b. AMDIR (10.69.3.3)
 # langkah sama kaya di ERENDIS, tapi ini buat SLAVE DNS
 
+# 1. install bind9
 
 cat > soal_4.sh << EOFS
 #!/bin/bash
 
-cat > /etc/resolv.conf << 'EOF'
-nameserver 10.69.5.2
-nameserver 10.69.3.2
-nameserver 10.69.3.3
-EOF
-
-# 1. install bind9
 apt-get update
 apt-get install bind9 bind9utils dnsutils -y
 
@@ -143,15 +134,15 @@ options {
 };
 EOF
 
-# 4. restart BIND9
+# 4. cek syntaxnya
+named-checkconf
+
+# 5. restart BIND9
 ln -s /etc/init.d/named /etc/init.d/bind9
 service bind9 restart
 
 EOFS
-
-# 5. cek syntaxnya
-named-checkconf
-
+bash soal_4.sh
 
 # 6. cek zone transfer
 ls -la /var/lib/bind/

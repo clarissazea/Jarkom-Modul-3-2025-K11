@@ -1,6 +1,11 @@
 
 # ALDARION (update konfigurasi)
 
+# jangan lupa ganti
+cat > /etc/resolv.conf << 'EOF'
+nameserver 10.69.5.2
+EOF
+
 # 1. Update DHCP config dengan lease time baru
 cat > /etc/dhcp/dhcpd.conf << 'EOF'
 option domain-name "K11.com";
@@ -13,10 +18,9 @@ max-lease-time 3600;
 authoritative;
 ddns-update-style none;
 
-# ============================================
 # SUBNET 10.69.1.0/24 - Keluarga Manusia
 # Lease time: 30 menit (1800 detik)
-# ============================================
+
 subnet 10.69.1.0 netmask 255.255.255.0 {
     range 10.69.1.6 10.69.1.34;
     range 10.69.1.68 10.69.1.94;
@@ -27,10 +31,9 @@ subnet 10.69.1.0 netmask 255.255.255.0 {
     max-lease-time 3600;       # 1 jam
 }
 
-# ============================================
 # SUBNET 10.69.2.0/24 - Keluarga Peri
 # Lease time: 10 menit (600 detik = 1/6 jam)
-# ============================================
+
 subnet 10.69.2.0 netmask 255.255.255.0 {
     range 10.69.2.35 10.69.2.67;
     range 10.69.2.96 10.69.2.121;
