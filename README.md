@@ -265,6 +265,8 @@ dig elros.com
 
 <img width="1708" height="647" alt="image" src="https://github.com/user-attachments/assets/3564deb8-52d0-4737-a405-896e7556cda6" />
 
+<img width="1468" height="1067" alt="image" src="https://github.com/user-attachments/assets/7cea581c-a6d0-4957-8873-51e16829f99d" />
+
 
 # SOAL 7
 
