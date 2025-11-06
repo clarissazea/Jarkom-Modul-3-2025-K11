@@ -139,6 +139,7 @@ tes nslookup elros.K11.com 127.0.0.1
 
 <img width="763" height="282" alt="image" src="https://github.com/user-attachments/assets/5e790e3b-f4f9-4b94-8cea-5f3d2365986b" />
 
+<img width="1064" height="461" alt="image" src="https://github.com/user-attachments/assets/aabd1905-2cfa-4827-a5bb-4cc994ea46c9" />
 
 
 
@@ -247,6 +248,13 @@ dig -x 10.69.3.2 @127.0.0.1
 
 <img width="1127" height="652" alt="image" src="https://github.com/user-attachments/assets/40b63d1f-b248-4e85-8b04-b5fa35828499" />
 
+
+dig www.com
+<img width="1161" height="669" alt="image" src="https://github.com/user-attachments/assets/c37ae3b1-1804-432b-8627-89fc15edd87b" />
+
+dig elros.com
+
+<img width="1276" height="659" alt="image" src="https://github.com/user-attachments/assets/8d5fb6c4-a170-48d9-a9f1-ce33c5411f3c" />
 
 
 # SOAL 6
