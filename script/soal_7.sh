@@ -1,164 +1,285 @@
+# 1. ELENDIL
 
-# a. SETUP LARAVEL WORKERS (jalankan di Elendil, Isildur, Anarion)
-
-# jangan lupa ganti 
-cat > /etc/resolv.conf << 'EOF'
-nameserver 10.69.5.2
-EOF
-
-
-# 1. update repo 
+# --- 1. Instalasi Paket yang Dibutuhkan ---
 apt-get update
 
-# 2. install dependencies
-apt-get install -y lsb-release ca-certificates apt-transport-https software-properties-common gnupg2
+# Install paket prasyarat untuk menambah repositori PHP
+apt-get install -y lsb-release apt-transport-https ca-certificates wget
 
-# 3. add PHP 8.4 repository (Sury)
-curl -sSL https://packages.sury.org/php/README.txt | bash -x
+# Tambahkan GPG key dan repositori Sury untuk PHP 8.4
+wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
+echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/php.list
 apt-get update
 
-# 4. install PHP 8.4 dan extensions
-apt-get install -y php8.4 php8.4-fpm php8.4-cli php8.4-common php8.4-mysql php8.4-xml php8.4-curl php8.4-mbstring php8.4-zip php8.4-gd php8.4-intl php8.4-bcmath
+# Install semua kebutuhan
+apt-get install -y php8.4-fpm php8.4-mbstring php8.4-xml php8.4-mysql php8.4-cli php8.4-common php8.4-intl nginx git composer
 
-# 5. install Nginx
-apt-get install -y nginx
-
-# 6. install Composer
-curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
-# 7. install Git & unzip
-apt-get install -y git unzip
-
-
-# install cepat
-apt-get update
-apt-get install -y lsb-release ca-certificates apt-transport-https software-properties-common gnupg2
-curl -sSL https://packages.sury.org/php/README.txt | bash -x
-apt-get update
-apt-get install -y php8.4 php8.4-fpm php8.4-cli php8.4-common php8.4-mysql php8.4-xml php8.4-curl php8.4-mbstring php8.4-zip php8.4-gd php8.4-intl php8.4-bcmath
-apt-get install -y nginx
-curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-apt-get install -y git unzip
-
-
-
-# 8. Verifikasi instalasi
-php -v
-composer --version
-nginx -v
-
-
-
-# b. CLONE LARAVEL PROJECT
-
-# 1. Buat direktori untuk project
-mkdir -p /var/www
-
-# 2. Clone dari resource
+# --- 2. Unduh dan Siapkan Aplikasi Laravel ---
+# Pindah ke direktori web server
 cd /var/www
-git clone https://github.com/sofronz/simple-rest-api.git laravel
 
-cd /var/www/laravel
+# Unduh kode aplikasi dari GitHub 
+git clone https://github.com/elshiraphine/laravel-simple-rest-api.git
 
-# 3. Install dependencies dengan Composer
+# Masuk ke direktori proyek
+cd laravel-simple-rest-api
 
-curl -sS https://getcomposer.org/installer | php
+# Install semua dependensi PHP dengan Composer
+composer install 
+composer update
 
-composer install
-
-# kl gabisa:
-
-rm -f /usr/local/bin/composer
-mv /var/www/laravel/composer.phar /usr/local/bin/composer
-chmod +x /usr/local/bin/composer
-composer --version
-cd /var/www/laravel
-composer install
-
-
-# 4. Setup permissions
-chown -R www-data:www-data /var/www/laravel
-chmod -R 755 /var/www/laravel
-chmod -R 777 /var/www/laravel/storage
-chmod -R 777 /var/www/laravel/bootstrap/cache
-
-# 5. Copy .env file
+# Buat file environment dari contoh yang ada
 cp .env.example .env
 
-# 6. Generate application key
+# Buat kunci enkripsi aplikasi
 php artisan key:generate
 
-php artisan serve
-
-# 7. Setup database di .env secara otomatis
-# Database di Palantir (10.69.4.2)
-sed -i 's/DB_HOST=127.0.0.1/DB_HOST=10.69.4.2/' /var/www/laravel/.env
-sed -i 's/DB_DATABASE=laravel/DB_DATABASE=K11_db/' /var/www/laravel/.env
-sed -i 's/DB_USERNAME=root/DB_USERNAME=K11_user/' /var/www/laravel/.env
-sed -i 's/DB_PASSWORD=/DB_PASSWORD=K11_password/' /var/www/laravel/.env
 
 
-nano /var/www/laravel/.env
-# DB_HOST=10.69.4.2
-# DB_DATABASE=K11_db
-# DB_USERNAME=K11_user
-# DB_PASSWORD=K11_password
-
-# c. KONFIGURASI NGINX untuk Laravel
-
-
-# Buat config nginx
-
-# UNTUK ELENDIL (10.69.1.2):
-cat > /etc/nginx/sites-available/laravel << 'EOF'
+# --- 3. Konfigurasi Nginx ---
+# Buat file konfigurasi server block untuk Laravel
+cat <<EOF > /etc/nginx/sites-available/laravel
 server {
-    listen 80;
-    server_name elendil.K11.com 10.69.1.2;
+   # diubah sesuai node
+    # Elendil: 8001
+    # Isildur: 8002
+    # Anarion: 8003
+    listen 8001;
 
-    root /var/www/laravel/public;
+    root /var/www/laravel-simple-rest-api/public;
     index index.php index.html index.htm;
+    server_name _;
 
     location / {
-        try_files $uri $uri/ /index.php?$query_string;
+        try_files \$uri \$uri/ /index.php?\$query_string;
     }
 
-    location ~ \.php$ {
+    location ~ \.php\$ {
         include snippets/fastcgi-php.conf;
+        # Pastikan ini menunjuk ke versi PHP yang benar
         fastcgi_pass unix:/var/run/php/php8.4-fpm.sock;
-        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-        include fastcgi_params;
     }
 
     location ~ /\.ht {
         deny all;
     }
-
-    error_log /var/log/nginx/laravel_error.log;
-    access_log /var/log/nginx/laravel_access.log;
 }
 EOF
 
-# --- ULANGI UNTUK ISILDUR (10.69.1.3) ---
-# Ubah server_name: isildur.K11.com 10.69.1.3
-
-# --- ULANGI UNTUK ANARION (10.69.1.4) ---
-# Ubah server_name: anarion.K11.com 10.69.1.4
-
-# 1. Enable site
+# --- 4. Finalisasi dan Jalankan Layanan ---
+# symbolic link
 ln -s /etc/nginx/sites-available/laravel /etc/nginx/sites-enabled/
+
+# Hapus konfigurasi default agar tidak bentrok
 rm /etc/nginx/sites-enabled/default
 
-# 2. Test nginx config
-nginx -t
+# Berikan izin akses folder 'storage' Laravel kepada web server
+chown -R www-data:www-data /var/www/laravel-simple-rest-api/storage
 
-# 3. Restart services
-service php8.4-fpm restart
+# Mulai service PHP-FPM dan restart Nginx
+service php8.4-fpm start
 service nginx restart
 
-# Ulangi untuk Isildur & Anarion (ganti server_name dan IP sesuai node)
+# revisi
+
+# 1. Masuk ke direktori aplikasi
+cd /var/www/laravel-simple-rest-api
+
+# 2. update
+composer update
+
+# 3.'key:generate' 
+php artisan key:generate
 
 
-# d. TEST LARAVEL WORKERS
+
+
+
+
+# 2. ISILDUR: 
+# --- 1. Instalasi Paket yang Dibutuhkan ---
+apt-get update
+
+# Install paket prasyarat untuk menambah repositori PHP
+apt-get install -y lsb-release apt-transport-https ca-certificates wget
+
+# Tambahkan GPG key dan repositori Sury untuk PHP 8.4
+wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
+echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/php.list
+apt-get update
+
+# Install semua kebutuhan
+apt-get install -y php8.4-fpm php8.4-mbstring php8.4-xml php8.4-mysql php8.4-cli php8.4-common php8.4-intl nginx git composer
+
+# --- 2. Unduh dan Siapkan Aplikasi Laravel ---
+# Pindah ke direktori web server
+cd /var/www
+
+# Unduh kode aplikasi dari GitHub
+git clone https://github.com/elshiraphine/laravel-simple-rest-api.git
+
+# Masuk ke direktori proyek
+cd laravel-simple-rest-api
+
+# Install semua dependensi PHP dengan Composer
+composer install
+
+composer update
+
+# Buat file environment dari contoh yang ada
+cp .env.example .env
+
+# Buat kunci enkripsi aplikasi
+php artisan key:generate
+
+# --- 3. Konfigurasi Nginx ---
+# Buat file konfigurasi server block untuk Laravel
+
+cat <<EOF > /etc/nginx/sites-available/laravel
+server {
+    # ubah sesuai port
+    # Elendil: 8001
+    # Isildur: 8002
+    # Anarion: 8003
+    listen 8002;
+
+    root /var/www/laravel-simple-rest-api/public;
+    index index.php index.html index.htm;
+    server_name _;
+
+    location / {
+        try_files \$uri \$uri/ /index.php?\$query_string;
+    }
+
+    location ~ \.php\$ {
+        include snippets/fastcgi-php.conf;
+        # Pastikan ini menunjuk ke versi PHP yang benar
+        fastcgi_pass unix:/var/run/php/php8.4-fpm.sock;
+    }
+
+    location ~ /\.ht {
+        deny all;
+    }
+}
+EOF
+
+# --- 4. Finalisasi dan Jalankan Layanan ---
+ln -s /etc/nginx/sites-available/laravel /etc/nginx/sites-enabled/
+
+# Hapus konfigurasi default (g bentrok)
+rm /etc/nginx/sites-enabled/default
+
+# Berikan izin akses folder 'storage' Laravel kepada web server
+chown -R www-data:www-data /var/www/laravel-simple-rest-api/storage
+
+# Mulai service PHP-FPM dan restart Nginx
+service php8.4-fpm start
+service nginx restart
+
+# revisi
+
+# 1. Masuk ke direktori aplikasi
+cd /var/www/laravel-simple-rest-api
+
+# 2. update
+composer update
+
+# 3. key generate
+php artisan key:generate
+
+
+
+# 3. ANARION
+# --- 1. Instalasi Paket yang Dibutuhkan ---
+apt-get update
+
+# Install paket prasyarat untuk menambah repositori PHP
+apt-get install -y lsb-release apt-transport-https ca-certificates wget
+
+# Tambahkan GPG key dan repositori Sury untuk PHP 8.4
+wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
+echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/php.list
+apt-get update
+
+# Install semua kebutuhan
+apt-get install -y php8.4-fpm php8.4-mbstring php8.4-xml php8.4-mysql php8.4-cli php8.4-common php8.4-intl nginx git composer
+
+# --- 2. Unduh dan Siapkan Aplikasi Laravel ---
+# Pindah ke direktori web server
+cd /var/www
+
+# Unduh kode aplikasi dari GitHub (Resource-laravel)
+git clone https://github.com/elshiraphine/laravel-simple-rest-api.git
+
+# Masuk ke direktori proyek
+cd laravel-simple-rest-api
+
+# Install semua dependensi PHP dengan Composer
+composer install
+
+# Buat file environment dari contoh yang ada
+cp .env.example .env
+
+# Buat kunci enkripsi aplikasi
+php artisan key:generate
+
+# --- 3. Konfigurasi Nginx ---
+# Buat file konfigurasi server block untuk Laravel
+cat <<EOF > /etc/nginx/sites-available/laravel
+server {
+    # !ubah sesuai node
+    # Elendil: 8001
+    # Isildur: 8002
+    # Anarion: 8003
+    listen 8003;
+
+    root /var/www/laravel-simple-rest-api/public;
+    index index.php index.html index.htm;
+    server_name _;
+
+    location / {
+        try_files \$uri \$uri/ /index.php?\$query_string;
+    }
+
+    location ~ \.php\$ {
+        include snippets/fastcgi-php.conf;
+        # Pastikan ini menunjuk ke versi PHP yang benar
+        fastcgi_pass unix:/var/run/php/php8.4-fpm.sock;
+    }
+
+    location ~ /\.ht {
+        deny all;
+    }
+}
+EOF
+
+# --- 4. Finalisasi dan Jalankan Layanan ---
+# symbolic link
+ln -s /etc/nginx/sites-available/laravel /etc/nginx/sites-enabled/
+
+# Hapus konfigurasi default agar tidak bentrok
+rm /etc/nginx/sites-enabled/default
+
+# Berikan izin akses folder 'storage' Laravel kepada web server
+chown -R www-data:www-data /var/www/laravel-simple-rest-api/storage
+
+# Mulai service PHP-FPM dan restart Nginx
+service php8.4-fpm start
+service nginx restart
+
+
+# revisi
+
+# 1. Masuk ke direktori aplikasi
+cd /var/www/laravel-simple-rest-api
+
+# 2. update
+composer update
+
+# 3. key generate
+php artisan key:generate
+
+# TEST LARAVEL WORKERS
 # TEST dari CLIENT (Miriel, Celebrimbor, dll)
 
 # 1. Install lynx di client
@@ -173,3 +294,9 @@ lynx http://anarion.K11.com
 # 3. Test dengan curl
 curl http://elendil.K11.com
 curl http://isildur.K11.com
+
+lynx http://10.69.1.2
+
+lynx http://10.69.1.2:8001
+lynx http://10.69.1.3:8002
+lynx http://10.69.1.4:8003

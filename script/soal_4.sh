@@ -3,6 +3,8 @@
 
 # jangan lupa ganti erendis dan amdir
 
+cat > soal_4.sh << EOFS
+#!/bin/bash
 
 cat > /etc/resolv.conf << 'EOF'
 nameserver 10.69.5.2
@@ -86,6 +88,9 @@ EOF
 ln -s /etc/init.d/named /etc/init.d/bind9
 service bind9 start
 
+EOFS
+
+
 # 6. cek syntax konfigurasi
 named-checkconf
 named-checkzone K11.com /etc/bind/jarkom/K11.com
@@ -100,6 +105,8 @@ named-checkzone K11.com /etc/bind/jarkom/K11.com
 # langkah sama kaya di ERENDIS, tapi ini buat SLAVE DNS
 
 
+cat > soal_4.sh << EOFS
+#!/bin/bash
 
 cat > /etc/resolv.conf << 'EOF'
 nameserver 10.69.5.2
@@ -143,6 +150,7 @@ EOF
 ln -s /etc/init.d/named /etc/init.d/bind9
 service bind9 restart
 
+EOFS
 
 # 5. cek syntaxnya
 named-checkconf

@@ -1,6 +1,12 @@
 
 # a. ERENDIS
 
+cat > /etc/resolv.conf << 'EOF'
+nameserver 10.69.5.2
+nameserver 10.69.3.2
+nameserver 10.69.3.3
+EOF
+
 # 1. update zone file dengan CNAME, PTR, dan TXT records
 
 cat > soal_5.sh << EOFS
