@@ -1,6 +1,274 @@
 # Jarkom-Modul-3-2025-K11
 
+# The Last Alliance Gathers
+
+Bayangan dari timur memanjang, lebih gelap dari malam tanpa bintang. Di Lindon, Gilgalad merasakan angin dingin yang tak biasa merayapi menaranya. Panji biru dan peraknya berkibar gelisah, seolah tahu badai api akan segera datang. Ia menggenggam tombaknya, Aeglos, merasakan tanggung jawab sebagai Raja Tertinggi menekan bahunya. Di selatan, Elendil, yang baru saja membangun kerajaannya dari puing-puing kenangan Númenor yang tenggelam, menatap ke arah Mordor. Pedangnya, Narsil, yang belum patah, berkilauan di sisinya, memantulkan tekad pahit seorang penyintas. Putra-putranya, Isildur dan Anarion, memeriksa baju zirah mereka di Osgiliath. Darah muda mendidih, namun mata mereka menyimpan bayangan laut yang menelan tanah air mereka. Di pegunungan yang menjulang, Durin di Khazad-dûm mendengar panggilan terompet perang. Kapak-kapak mulai diasah, dan gema langkah kaki para Kurcaci mengguncang akar gunung. Di Greenwood yang luas, Oropher mengumpulkan pasukan Silvan-nya. Hutan terasa menahan napas, daun-daun emasnya bergetar bukan karena angin. Di Eregion yang telah lama sunyi, Celebrimbor hanyalah nama dalam legenda, namun Tiga Cincin yang dibuatnya masih bersinar di jari-jari Galadriel dan Gilgalad, berdenyut dengan kewaspadaan. Galadriel dan Celeborn di Lórien merasakan kekuatan gelap mengumpul seperti awan badai. Bahkan para worker, Elendil, Isildur, Anárion, Galadriel, Celeborn, Oropher, merasakan energi yang berbeda mengalir melalui node mereka, sebuah perintah yang lebih besar sedang dijalankan. Para client, Miriel, Amandil, Gilgalad, Celebrimbor, menanti dengan cemas di balik benteng-benteng baru. Aldarion (DHCP Server) mulai mengalokasikan sumber daya terakhir, sementara Erendis (DNS Master) memastikan semua nama dan tujuan tercatat dengan benar sebelum kekacauan dimulai. Dan di Mordor, menara Barad-dûr menjulang, gelap dan mengancam, seolah mata tanpa kelopak sedang mengawasi mereka semua, menunggu. Zaman Kedua baru saja menarik napas terakhirnya sebelum terjun ke dalam api perang.
+
+## Topologi
+
+<img width="1202" height="818" alt="image" src="https://github.com/user-attachments/assets/72ee5a37-07be-4178-b7dc-cf78b6218256" />
+
 ## SOAL 1
+
+Di awal Zaman Kedua, setelah kehancuran Beleriand, para Valar menugaskan untuk membangun kembali jaringan komunikasi antar kerajaan. Para Valar menyalakan Minastir, Aldarion, Erendis, Amdir, Palantir, Narvi, Elros, Pharazon, Elendil, Isildur, Anarion, Galadriel, Celeborn, Oropher, Miriel, Amandil, Gilgalad, Celebrimbor, Khamul, dan pastikan setiap node (selain Durin sang penghubung antar dunia) dapat sementara berkomunikasi dengan Valinor/Internet (nameserver 192.168.122.1) untuk menerima instruksi awal.
+
+## Script
+
+```
+# DURIN - Router & DHCP Relay
+
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet dhcp
+
+auto eth1
+iface eth1 inet static
+    address 10.69.1.1
+    netmask 255.255.255.0
+
+auto eth2
+iface eth2 inet static
+    address 10.69.2.1
+    netmask 255.255.255.0
+
+auto eth3
+iface eth3 inet static
+    address 10.69.3.1
+    netmask 255.255.255.0
+
+auto eth4
+iface eth4 inet static
+    address 10.69.4.1
+    netmask 255.255.255.0
+
+auto eth5
+iface eth5 inet static
+    address 10.69.5.1
+    netmask 255.255.255.0
+
+# run ini
+echo "nameserver 192.168.122.1" > /etc/resolv.conf
+echo 1 > /proc/sys/net/ipv4/ip_forward
+iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE -s 10.69.0.0/16
+
+# ELENDIL - Laravel Worker-1 (10.69.1.2)
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet static
+    address 10.69.1.2
+    netmask 255.255.255.0
+    gateway 10.69.1.1
+    dns-nameservers 192.168.122.1
+
+# ISILDUR - Laravel Worker-2 (10.69.1.3)
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet static
+    address 10.69.1.3
+    netmask 255.255.255.0
+    gateway 10.69.1.1
+    dns-nameservers 192.168.122.1
+
+# ANARION - Laravel Worker-3 (10.69.1.4)
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet static
+    address 10.69.1.4
+    netmask 255.255.255.0
+    gateway 10.69.1.1
+    dns-nameservers 192.168.122.1
+
+
+# MIRIEL - Client-Static-1 (10.69.1.5)
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet static
+    address 10.69.1.5
+    netmask 255.255.255.0
+    gateway 10.69.1.1
+    dns-nameservers 192.168.122.1
+
+
+# ELROS - Load Balancer Laravel (10.69.1.6)
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet static
+    address 10.69.1.6
+    netmask 255.255.255.0
+    gateway 10.69.1.1
+    dns-nameservers 192.168.122.1
+
+
+# AMANDIL - Client-Dynamic-2 (DHCP)
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet dhcp
+
+SUBNET1
+
+# GALADRIEL - PHP Worker-1 (10.69.2.2)
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet static
+    address 10.69.2.2
+    netmask 255.255.255.0
+    gateway 10.69.2.1
+    dns-nameservers 192.168.122.1
+
+
+# CELEBORN - PHP Worker-2 (10.69.2.3)
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet static
+    address 10.69.2.3
+    netmask 255.255.255.0
+    gateway 10.69.2.1
+    dns-nameservers 192.168.122.1
+
+# OROPHER - PHP Worker-3 (10.69.2.4)
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet static
+    address 10.69.2.4
+    netmask 255.255.255.0
+    gateway 10.69.2.1
+    dns-nameservers 192.168.122.1
+
+
+# CELEBRIMBOR - Client-Static-2 (10.69.2.5)
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet static
+    address 10.69.2.5
+    netmask 255.255.255.0
+    gateway 10.69.2.1
+    dns-nameservers 192.168.122.1
+
+
+# GILGALAD - Client-Dynamic-1 (DHCP)
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet dhcp
+
+
+# PHARAZON - Load Balancer PHP (10.69.4.6)
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet static
+    address 10.69.2.6
+    netmask 255.255.255.0
+    gateway 10.69.2.1
+    dns-nameservers 192.168.122.1
+
+SUBNET2
+
+# ERENDIS - DNS Master (10.69.3.2)
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet static
+    address 10.69.3.2
+    netmask 255.255.255.0
+    gateway 10.69.3.1
+    dns-nameservers 192.168.122.1
+
+# KHAMUL - Client-Fixed-Address (10.69.3.95)
+# Di Switch8 yang terhubung ke Switch3
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet dhcp
+hwaddress ether 02:00:00:00:00:01
+
+SUBNET3
+
+# PALANTIR - Database Server (10.69.4.2)
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet static
+    address 10.69.4.2
+    netmask 255.255.255.0
+    gateway 10.69.4.1
+    dns-nameservers 192.168.122.1
+
+# NARVI - Database Slave (10.69.4.3)
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet static
+    address 10.69.4.3
+    netmask 255.255.255.0
+    gateway 10.69.4.1
+    dns-nameservers 192.168.122.1
+
+# ALDARION - DHCP Server (10.69.4.4)
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet static
+    address 10.69.4.4
+    netmask 255.255.255.0
+    gateway 10.69.4.1
+    dns-nameservers 192.168.122.1
+
+# AMDIR - DNS Slave (10.69.4.5)
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet static
+    address 10.69.3.3
+    netmask 255.255.255.0
+    gateway 10.69.3.1
+    dns-nameservers 192.168.122.1
+
+
+SUBNET4
+
+# MINASTIR - DNS Forwarder (10.69.5.2)
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet static
+    address 10.69.5.2
+    netmask 255.255.255.0
+    gateway 10.69.5.1
+    dns-nameservers 192.168.122.1
+
+```
 
 <img width="1449" height="674" alt="image" src="https://github.com/user-attachments/assets/5b3c2dfb-4fc7-4e2f-bf5a-811004fed5c3" />
 
@@ -13,13 +281,12 @@ iptables -t nat -L -v
 
 # Cek IP forwarding
 cat /proc/sys/net/ipv4/ip_forward
-# Harus output: 1
 ```
 
 <img width="921" height="449" alt="image" src="https://github.com/user-attachments/assets/1d078445-edf9-4343-b72e-5833cf615e66" />
 
 
-ping durin ke palantir
+`ping Durin ke Palantir`
 
 <img width="1095" height="336" alt="image" src="https://github.com/user-attachments/assets/5a3a0527-927f-4959-ae60-403e9180d611" />
 
@@ -34,23 +301,206 @@ ping durin ke palantir
 
 ## SOAL 2
 
-RESTART
+Raja Pelaut Aldarion, penguasa wilayah Númenor, memutuskan cara pembagian tanah client secara dinamis. Ia menetapkan:
 
-<img width="784" height="346" alt="image" src="https://github.com/user-attachments/assets/5943a602-74ad-4c9a-9ae5-f9284c770a67" />
+Client Dinamis Keluarga Manusia: Mendapatkan tanah di rentang [prefix ip].1.6 - [prefix ip].1.34 dan [prefix ip].1.68 - [prefix ip].1.94.
+Client Dinamis Keluarga Peri: Mendapatkan tanah di rentang [prefix ip].2.35 - [prefix ip].2.67 dan [prefix ip].2.96 - [prefix ip].2.121.
+Khamul yang misterius: Diberikan tanah tetap di [prefix ip].3.95, agar keberadaannya selalu diketahui. Pastikan Durin dapat menyampaikan dekrit ini ke semua wilayah yang terhubung dengannya.
 
-ALDARION
+## Script
 
-<img width="840" height="160" alt="image" src="https://github.com/user-attachments/assets/6b3fc468-48d2-43da-b21e-333283dfd3e7" />
+```
+# a. ALDARION (IP: 10.69.4.4)
 
-DURIN
+cat > soal_2.sh << EOFS
+#!/bin/bash
+# 1. update dan install DHCP Server
+apt-get update
+apt-get install isc-dhcp-server -y
 
-<img width="814" height="188" alt="image" src="https://github.com/user-attachments/assets/e94ae2a6-2d0a-4e8d-802c-e1be1241a46d" />
+# 2. konfigurasi interface DHCP
+cat > /etc/default/isc-dhcp-server << 'EOF'
+INTERFACESv4="eth0"
+INTERFACESv6=""
+EOF
+
+# 3. backup konfigurasi 
+cp /etc/dhcp/dhcpd.conf /etc/dhcp/dhcpd.conf.backup
+
+# 4. konfigurasi DHCP Server
+cat > /etc/dhcp/dhcpd.conf << 'EOF'
+# DHCP Server Configuration - K11 Aldarion
+# Domain dan DNS
+option domain-name "K11.com";
+option domain-name-servers 10.69.5.2;  # Minastir DNS Forwarder
+
+# Lease time
+default-lease-time 600;
+max-lease-time 7200;
+
+# Authoritative
+authoritative;
+
+# Update style
+ddns-update-style none;
+
+# SUBNET 10.69.1.0/24 - Client Dinamis Keluarga Manusia
+subnet 10.69.1.0 netmask 255.255.255.0 {
+    # Range 1: 10.69.1.6 - 10.69.1.34
+    range 10.69.1.6 10.69.1.34;
+    
+    # Range 2: 10.69.1.68 - 10.69.1.94
+    range 10.69.1.68 10.69.1.94;
+    
+    option routers 10.69.1.1;
+    option broadcast-address 10.69.1.255;
+    option domain-name-servers 10.69.5.2;
+    default-lease-time 600;
+    max-lease-time 7200;
+}
+
+# SUBNET 10.69.2.0/24 - Client Dinamis Keluarga Peri
+subnet 10.69.2.0 netmask 255.255.255.0 {
+    # Range 1: 10.69.2.35 - 10.69.2.67
+    range 10.69.2.35 10.69.2.67;
+    
+    # Range 2: 10.69.2.96 - 10.69.2.121
+    range 10.69.2.96 10.69.2.121;
+    
+    option routers 10.69.2.1;
+    option broadcast-address 10.69.2.255;
+    option domain-name-servers 10.69.5.2;
+    default-lease-time 600;
+    max-lease-time 7200;
+}
+
+# SUBNET 10.69.3.0/24 - Subnet untuk Erendis & Khamul
+subnet 10.69.3.0 netmask 255.255.255.0 {
+    option routers 10.69.3.1;
+    option domain-name-servers 10.69.5.2;
+}
+
+# SUBNET 10.69.4.0/24 - Subnet DHCP Server (Aldarion)
+subnet 10.69.4.0 netmask 255.255.255.0 {
+    option routers 10.69.4.1;
+    option domain-name-servers 10.69.5.2;
+}
+
+# SUBNET 10.69.5.0/24 - Subnet Minatsir
+subnet 10.69.5.0 netmask 255.255.255.0 {
+    option routers 10.69.5.1;
+    option domain-name-servers 10.69.5.2;
+}
+
+# FIXED ADDRESS - Khamul (10.69.3.95)
+host Khamul {
+    hardware ethernet 02:00:00:00:00:01;
+    fixed-address 10.69.3.95;
+    option routers 10.69.3.1;
+    option domain-name-servers 10.69.5.2;
+}
+EOF
+
+# 5. test konfigurasi syntax
+dhcpd -t -cf /etc/dhcp/dhcpd.conf
+
+# 6. restart DHCP Server
+service isc-dhcp-server restart
+
+EOFS
+
+# 7. cek status
+service isc-dhcp-server status
 
 
-STATUS DURIN 
 
-<img width="733" height="256" alt="image" src="https://github.com/user-attachments/assets/f503627b-f9a2-4b58-8a42-988c9b3562f7" />
 
+
+
+# b. DURIN
+
+cat > soal_2.sh << EOFS
+#!/bin/bash
+
+# 1. Install DHCP Relay
+apt-get update
+apt-get install isc-dhcp-relay -y
+
+# 2. Konfigurasi DHCP Relay
+cat > /etc/default/isc-dhcp-relay << 'EOF'
+# DHCP Relay Configuration for Durin
+# IP Address DHCP Server (Aldarion)
+SERVERS="10.69.4.4"
+
+# Interface yang akan relay DHCP requests
+# Semua interface kecuali eth0 (internet)
+INTERFACES="eth1 eth2 eth3 eth4 eth5"
+
+# Options kosong (default)
+OPTIONS=""
+EOF
+
+# 3. Restart DHCP Relay
+service isc-dhcp-relay restart
+
+EOFS
+
+
+# 4. Cek status
+service isc-dhcp-relay status
+
+
+
+# c. TESTING 
+
+# 1. Gilgalad
+
+# Cek IP yang didapat
+ip a show eth0
+
+# Harus dapat IP di range:
+# - 10.69.2.35 - 10.69.2.67 ATAU
+# - 10.69.2.96 - 10.69.2.121
+
+# Cek DNS yang didapat
+cat /etc/resolv.conf
+# Harus ada: nameserver 10.69.5.2
+
+# Test koneksi
+ping -c 3 10.69.2.1   # Gateway
+ping -c 3 10.69.4.4   # Aldarion (DHCP Server)
+
+# 2. Amandil
+
+ip a show eth0
+
+# Harus dapat IP di range:
+# - 10.69.1.6 - 10.69.1.34 ATAU
+# - 10.69.1.68 - 10.69.1.94
+
+cat /etc/resolv.conf
+# Harus ada: nameserver 10.69.5.2
+
+ping -c 3 10.69.1.1   # Gateway
+
+# 3. Khamul
+
+# MAC Address
+ip link show eth0 | grep ether
+# Harus: 02:00:00:00:00:01
+
+# Cek IP
+ip a show eth0
+
+# HARUS dapat IP: 10.69.3.95 (FIXED!)
+
+cat /etc/resolv.conf
+# Harus ada: nameserver 10.69.5.2
+
+ping -c 3 10.69.3.1   # Gateway
+```
+
+## Testing
 
 - Testing Gilgalad
 <img width="1656" height="155" alt="image" src="https://github.com/user-attachments/assets/a82c5065-0aad-495a-90e2-aeb8127454f7" />
@@ -77,25 +527,74 @@ STATUS DURIN
 
 ## SOAL 3
 
-a. test dari minatsir sendiri
+Untuk mengontrol arus informasi ke dunia luar (Valinor/Internet), sebuah menara pengawas, Minastir didirikan. Minastir mengatur agar semua node (kecuali Durin) hanya dapat mengirim pesan ke luar Arda setelah melewati pemeriksaan di Minastir.
 
-<img width="852" height="136" alt="image" src="https://github.com/user-attachments/assets/a424c44c-3042-4b05-aac5-0253613de1d8" />
+## Script
 
-nslookup google.com 127.0.0.1
+```
 
-<img width="717" height="669" alt="image" src="https://github.com/user-attachments/assets/0c92d64a-bdde-4f1f-b7dd-186cbc36513e" />
+apt-get update
+apt-get install bind9 bind9utils dnsutils -y
+
+# 2. Backup konfigurasi 
+cp /etc/bind/named.conf.options /etc/bind/named.conf.options.backup
+
+# 3. Konfigurasi DNS Forwarder
+cat > /etc/bind/named.conf.options << 'EOF'
+options {
+    directory "/var/cache/bind";
+    
+    # Forwarder ke Valinor/Internet (192.168.122.1)
+    forwarders {
+        10.69.3.2;
+        10.69.3.3;
+        192.168.122.1;
+
+    };
+    forward only;
+
+    # DNSSEC validation
+    dnssec-validation no;
+
+    # Allow query dari semua network internal
+    allow-query { any; };
+    
+    # Recursion harus enabled untuk forwarder
+    recursion yes;
+    
+    # Listen pada semua interface
+    listen-on { any; };
+    
+    # Disable IPv6 jika tidak dipakai
+    listen-on-v6 { none; };
+    
+    # Tidak authoritative untuk domain apapun
+    auth-nxdomain no;
+    
+};
+EOF
+
+cat > /etc/bind/named.conf.local << 'EOF'
+
+zone "K11.com" {
+    type forward;
+    forward only;
+    forwarders {
+        10.69.3.2;  
+        10.69.3.3;
+        192.168.122.1;
+        };
+};
+```
+## Testing
+
+a. Test dari Minatsir sendiri
 
 dig google.com @127.0.0.1
 
 <img width="967" height="691" alt="image" src="https://github.com/user-attachments/assets/96aad93a-2609-4d88-acef-2c8427edb8a1" />
 
-
-
-b. test di elendil
-
-nslookup google.com
-
-<img width="556" height="639" alt="image" src="https://github.com/user-attachments/assets/cbe518a2-ebba-4a88-85b2-fa6de4a89cb7" />
+b. Test di elendil
 
 dig google.com
 
@@ -109,7 +608,7 @@ ping -c 3 google.com
 c. Test di Gilgalad/Amandil/Khamul (setelah dapat IP dari DHCP)
 
 
-- gilgalad
+- Gilgalad
 
 <img width="636" height="100" alt="image" src="https://github.com/user-attachments/assets/e7c36bb6-5514-4002-a422-685a44f84499" />
 
@@ -125,6 +624,111 @@ c. Test di Gilgalad/Amandil/Khamul (setelah dapat IP dari DHCP)
 
 ## SOAL 4
 
+Ratu Erendis, sang pembuat peta, menetapkan nama resmi untuk wilayah utama (<xxxx>.com). Ia menunjuk dirinya (ns1.<xxxx>.com) dan muridnya Amdir (ns2.<xxxx>.com) sebagai penjaga peta resmi. Setiap lokasi penting (Palantir, Elros, Pharazon, Elendil, Isildur, Anarion, Galadriel, Celeborn, Oropher) diberikan nama domain unik yang menunjuk ke lokasi fisik tanah mereka. Pastikan Amdir selalu menyalin peta (master-slave) dari Erendis dengan setia.
+
+### Erendis
+```
+apt-get update
+apt-get install bind9 bind9utils dnsutils -y
+
+# 2. konfigurasi named.conf.local
+cat > /etc/bind/named.conf.local << 'EOF'
+// Zone untuk K11.com (Master)
+zone "K11.com" {
+    type master;
+    file "/etc/bind/jarkom/K11.com";
+    allow-transfer { 10.69.3.3; }; // IP Amdir (Slave)
+    notify yes;
+};
+EOF
+
+# 3. bikin directory untuk zone files
+mkdir -p /etc/bind/jarkom
+
+# 4. bikin zone file K11.com
+cat > /etc/bind/jarkom/K11.com << 'EOF'
+
+; BIND data file for K11.com
+
+$TTL    604800
+@       IN      SOA     K11.com. root.K11.com. (
+                              2024110201    ; Serial (YYYYMMDDNN)
+                              604800        ; Refresh
+                              86400         ; Retry
+                              2419200       ; Expire
+                              604800 )      ; Negative Cache TTL
+;
+; Name servers
+@           IN      NS      ns1.K11.com.
+@           IN      NS      ns2.K11.com.
+
+; A records untuk name servers
+ns1         IN      A       10.69.3.2    ; Erendis
+ns2         IN      A       10.69.3.3    ; Amdir
+
+; A records untuk semua lokasi penting
+palantir    IN      A       10.69.4.2    ; Database Server
+elros       IN      A       10.69.1.6    ; Load Balancer Laravel
+pharazon    IN      A       10.69.2.6    ; Load Balancer PHP
+elendil     IN      A       10.69.1.2    ; Laravel Worker-1
+isildur     IN      A       10.69.1.3    ; Laravel Worker-2
+anarion     IN      A       10.69.1.4    ; Laravel Worker-3
+galadriel   IN      A       10.69.2.2    ; PHP Worker-1
+celeborn    IN      A       10.69.2.3    ; PHP Worker-2
+oropher     IN      A       10.69.2.4    ; PHP Worker-3
+EOF
+
+# 5. konfigurasi options
+cat > /etc/bind/named.conf.options << 'EOF'
+options {
+    directory "/var/cache/bind";
+    
+    # Forwarder ke Minastir
+    forwarders {
+        10.69.5.2;
+    };
+    
+    allow-query { any; };
+    allow-transfer { 10.69.3.3; }; // Amdir
+    recursion yes;
+    listen-on-v6 { none; };
+    dnssec-validation auto;
+};
+```
+
+### Amdir
+
+```
+apt-get update
+apt-get install bind9 bind9utils dnsutils -y
+
+# 2. konfigurasi named.conf.local 
+cat > /etc/bind/named.conf.local << 'EOF'
+// Zone untuk K11.com (Slave)
+zone "K11.com" {
+    type slave;
+    masters { 10.69.3.2; }; // IP Erendis (Master)
+    file "/var/lib/bind/K11.com";
+    allow-notify { 10.69.3.2; };
+};
+EOF
+
+# 3. konfigurasi options
+cat > /etc/bind/named.conf.options << 'EOF'
+options {
+    directory "/var/cache/bind";
+    
+    # Forwarder ke Minastir
+    forwarders {
+        10.69.5.2;
+    };
+    
+    allow-query { any; };
+    recursion yes;
+    listen-on-v6 { none; };
+    dnssec-validation auto;
+};
+```
 named-checkconf
 named-checkzone K11.com /etc/bind/jarkom/K11.com
 
@@ -178,6 +782,136 @@ nslookup palantir.K11.com 10.69.3.3
 
 # SOAL 5
 
+Untuk memudahkan, nama alias www.<xxxx>.com dibuat untuk peta utama <xxxx>.com. Reverse PTR juga dibuat agar lokasi Erendis dan Amdir dapat dilacak dari alamat fisik tanahnya. Erendis juga menambahkan pesan rahasia (TXT record) pada petanya: "Cincin Sauron" yang menunjuk ke lokasi Elros, dan "Aliansi Terakhir" yang menunjuk ke lokasi Pharazon. Pastikan Amdir juga mengetahui pesan rahasia ini.
+
+### Erendis
+
+```
+\$TTL    604800
+@    IN   SOA   K11.com. root.K11.com. (
+                              2024110204    ; Serial (INCREMENT!)
+                              604800        ; Refresh
+                              86400         ; Retry
+                              2419200       ; Expire
+                              604800 )      ; Negative Cache TTL
+;
+; Name servers
+@           IN      NS      ns1.K11.com.
+@           IN      NS      ns2.K11.com.
+
+; A records untuk name servers
+ns1         IN      A       10.69.3.2    ; Erendis
+ns2         IN      A       10.69.3.3    ; Amdir
+
+; A records untuk domain utama
+@           IN      A       10.69.3.2    ; 
+
+; CNAME - Alias www
+www         IN      A       10.69.3.2    ; www.K11.com → K11.com
+
+; A records untuk semua lokasi penting
+palantir    IN      A       10.69.4.2
+elros       IN      A       10.69.1.6
+pharazon    IN      A       10.69.2.6
+elendil     IN      A       10.69.1.2
+isildur     IN      A       10.69.1.3
+anarion     IN      A       10.69.1.4
+galadriel   IN      A       10.69.2.2
+celeborn    IN      A       10.69.2.3
+oropher     IN      A       10.69.2.4
+
+; TXT Records - Pesan Rahasia
+Cincin-Sauron       IN      TXT     "Lokasi: elros.K11.com (10.69.1.6)"
+Aliansi-Terakhir    IN      TXT     "Lokasi: pharazon.K11.com (10.69.2.6)"
+EOF
+```
+
+```
+# 1. Tambahkan reverse zone untuk subnet 10.69.3.0/24 (Erendis)
+cat >> /etc/bind/named.conf.local << 'EOF'
+
+// Reverse zone untuk 10.69.3.0/24
+zone "3.69.10.in-addr.arpa" {
+    type master;
+    file "/etc/bind/jarkom/3.69.10.in-addr.arpa";
+    allow-transfer { 10.69.3.3; };
+};
+EOF
+
+# 2. Buat reverse zone file untuk 10.69.3.0/24
+cat > /etc/bind/jarkom/3.69.10.in-addr.arpa << 'EOF'
+;
+; Reverse DNS zone for 10.69.3.0/24
+;
+$TTL    604800
+@       IN      SOA     K11.com. root.K11.com. (
+                              2024110201    ; Serial
+                              604800        ; Refresh
+                              86400         ; Retry
+                              2419200       ; Expire
+                              604800 )      ; Negative Cache TTL
+;
+@       IN      NS      ns1.K11.com.
+@       IN      NS      ns2.K11.com.
+
+; PTR Records
+2       IN      PTR     ns1.K11.com.     ; 10.69.3.2 → ns1.K11.com (Erendis)
+3       IN      PTR     ns2.K11.com.     ; 10.69.3.3 → ns2.K11.com (Amdir)
+EOF
+
+# 3. Tambahkan reverse zone untuk subnet 10.69.4.0/24 (Amdir)
+cat >> /etc/bind/named.conf.local << 'EOF'
+
+// Reverse zone untuk 10.69.4.0/24
+zone "4.69.10.in-addr.arpa" {
+    type master;
+    file "/etc/bind/jarkom/4.69.10.in-addr.arpa";
+    allow-transfer { 10.69.3.3; };
+};
+EOF
+
+# 4. Buat reverse zone file untuk 10.69.4.0/24
+cat > /etc/bind/jarkom/4.69.10.in-addr.arpa << 'EOF'
+;
+; Reverse DNS zone for 10.69.4.0/24
+;
+$TTL    604800
+@       IN      SOA     K11.com. root.K11.com. (
+                              2024110201    ; Serial
+                              604800        ; Refresh
+                              86400         ; Retry
+                              2419200       ; Expire
+                              604800 )      ; Negative Cache TTL
+;
+@       IN      NS      ns1.K11.com.
+@       IN      NS      ns2.K11.com.
+
+; PTR Records
+2       IN      PTR     palantir.K11.com.     ; 10.69.4.2 (Palantir)
+EOF
+
+```
+
+### Amdir
+```
+
+// Reverse zone untuk 10.69.3.0/24 (Slave)
+zone "3.69.10.in-addr.arpa" {
+    type slave;
+    masters { 10.69.3.2; };
+    file "/var/lib/bind/3.69.10.in-addr.arpa";
+    allow-notify { 10.69.3.2; };
+};
+
+// Reverse zone untuk 10.69.4.0/24 (Slave)
+zone "4.69.10.in-addr.arpa" {
+    type slave;
+    masters { 10.69.3.2; };
+    file "/var/lib/bind/4.69.10.in-addr.arpa";
+    allow-notify { 10.69.3.2; };
+};
+```
+
 - Test CNAME
 nslookup www.K11.com
 
@@ -197,9 +931,6 @@ dig Aliansi-Terakhir.K11.com TXT @10.69.3.2
 
 
 - Cek syntax
-named-checkconf
-named-checkzone 3.69.10.in-addr.arpa /etc/bind/jarkom/3.69.10.in-addr.arpa
-named-checkzone 4.69.10.in-addr.arpa /etc/bind/jarkom/4.69.10.in-addr.arpa
 
 <img width="1224" height="301" alt="image" src="https://github.com/user-attachments/assets/33c78166-312c-44e5-9e1c-b9bf16aaa87d" />
 
@@ -262,6 +993,70 @@ dig elros.com
 
 # SOAL 6
 
+Aldarion menetapkan aturan waktu peminjaman tanah. Ia mengatur:
+
+- Client Dinamis Keluarga Manusia dapat meminjam tanah selama setengah jam.
+- Client Dinamis Keluarga Peri hanya seperenam jam.
+- Batas waktu maksimal peminjaman untuk semua adalah satu jam.
+
+## Script
+
+### Aldarion
+```
+option domain-name "K11.com";
+option domain-name-servers 10.69.5.2;
+
+# Global lease time (1 jam = 3600 detik)
+default-lease-time 3600;
+max-lease-time 3600;
+
+authoritative;
+ddns-update-style none;
+
+# SUBNET 10.69.1.0/24 - Keluarga Manusia
+# Lease time: 30 menit (1800 detik)
+
+subnet 10.69.1.0 netmask 255.255.255.0 {
+    range 10.69.1.6 10.69.1.34;
+    range 10.69.1.68 10.69.1.94;
+    option routers 10.69.1.1;
+    option broadcast-address 10.69.1.255;
+    option domain-name-servers 10.69.5.2;
+    default-lease-time 1800;  # 30 menit
+    max-lease-time 3600;       # 1 jam
+}
+
+# SUBNET 10.69.2.0/24 - Keluarga Peri
+# Lease time: 10 menit (600 detik = 1/6 jam)
+
+subnet 10.69.2.0 netmask 255.255.255.0 {
+    range 10.69.2.35 10.69.2.67;
+    range 10.69.2.96 10.69.2.121;
+    option routers 10.69.2.1;
+    option broadcast-address 10.69.2.255;
+    option domain-name-servers 10.69.5.2;
+    default-lease-time 600;    # 10 menit (1/6 jam)
+    max-lease-time 3600;       # 1 jam
+}
+
+subnet 10.69.3.0 netmask 255.255.255.0 {
+    option routers 10.69.3.1;
+}
+
+subnet 10.69.4.0 netmask 255.255.255.0 {
+    option routers 10.69.4.1;
+}
+
+subnet 10.69.5.0 netmask 255.255.255.0 {
+    option routers 10.69.5.1;
+}
+
+host Khamul {
+    hardware ethernet 02:00:00:00:00:01;
+    fixed-address 10.69.3.95;
+}
+```
+
 <img width="858" height="130" alt="image" src="https://github.com/user-attachments/assets/2b116752-8574-42e8-8190-914d0934499b" />
 
 <img width="1678" height="736" alt="image" src="https://github.com/user-attachments/assets/642e2a96-acd8-4016-845d-030c07073b2d" />
@@ -272,6 +1067,9 @@ dig elros.com
 
 
 # SOAL 7
+
+Para Ksatria Númenor (Elendil, Isildur, Anarion) mulai membangun benteng pertahanan digital mereka menggunakan teknologi Laravel. Instal semua tools yang dibutuhkan (php8.4, composer, nginx) dan dapatkan cetak biru benteng dari Resource-laravel di setiap node worker Laravel. Cek dengan lynx di client.
+
 
 <img width="1041" height="311" alt="image" src="https://github.com/user-attachments/assets/b28508e6-7adf-4ff7-8f0a-ecbd38bf2ef1" />
 
@@ -308,6 +1106,46 @@ ANARION
 <img width="1905" height="1078" alt="image" src="https://github.com/user-attachments/assets/c2dafd80-d76a-4bcd-a936-f98b6ea85672" />
 
 # SOAL 8
+
+Setiap benteng Númenor harus terhubung ke sumber pengetahuan, Palantir. Konfigurasikan koneksi database di file .env masing-masing worker. Setiap benteng juga harus memiliki gerbang masuk yang unik; atur nginx agar Elendil mendengarkan di port 8001, Isildur di 8002, dan Anarion di 8003. Jangan lupa jalankan migrasi dan seeding awal dari Elendil. Buat agar akses web hanya bisa melalui domain nama, tidak bisa melalui ip.
+
+## Script
+
+### Palantir
+
+```
+# 1. Install paket
+apt-get update
+apt-get install -y mariadb-server net-tools
+
+# 2. Mulai service
+service mariadb start
+
+# 3. Buat database dan user
+mariadb -e "
+DROP USER IF EXISTS 'K11_user'@'%';
+CREATE USER 'K11_user'@'%' IDENTIFIED BY 'passwordK11';
+CREATE DATABASE IF NOT EXISTS db_K11;
+GRANT ALL PRIVILEGES ON db_K11.* TO 'K11_user'@'%';
+FLUSH PRIVILEGES;
+"
+
+# 4. Hentikan service untuk mengedit file
+service mariadb stop
+
+# 5. Tentukan file konfigurasi
+CONFIG_FILE="/etc/mysql/mariadb.conf.d/50-server.cnf"
+if [ ! -f "$CONFIG_FILE" ]; then
+    CONFIG_FILE="/etc/mysql/my.cnf"
+fi
+
+# 6. Perbaikan: Izinkan koneksi eksternal (mengomentari bind-address)
+sed -i "s/bind-address\s*=\s*127.0.0.1/#bind-address = 127.0.0.1/" "$CONFIG_FILE"
+sed -i "/skip-networking/d" "$CONFIG_FILE"
+
+# 7. Mulai service lagi
+service mariadb start
+```
 
 <img width="1531" height="852" alt="image" src="https://github.com/user-attachments/assets/93694ca3-de5e-421e-b35a-4c7635e15780" />
 
