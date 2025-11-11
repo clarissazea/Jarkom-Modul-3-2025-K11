@@ -307,3 +307,7 @@ ANARION
 
 <img width="1905" height="1078" alt="image" src="https://github.com/user-attachments/assets/c2dafd80-d76a-4bcd-a936-f98b6ea85672" />
 
+# SOAL 8
+
+<img width="1531" height="852" alt="image" src="https://github.com/user-attachments/assets/93694ca3-de5e-421e-b35a-4c7635e15780" />
+
