@@ -1149,3 +1149,74 @@ service mariadb start
 
 <img width="1531" height="852" alt="image" src="https://github.com/user-attachments/assets/93694ca3-de5e-421e-b35a-4c7635e15780" />
 
+<img width="1537" height="405" alt="image" src="https://github.com/user-attachments/assets/25a0fd7c-ee52-499f-9bfa-c27c60ba6104" />
+
+
+
+
+# SOAL 10
+
+Pemimpin bijak Elros ditugaskan untuk mengkoordinasikan pertahanan Númenor. Konfigurasikan nginx di Elros untuk bertindak sebagai reverse proxy. Buat upstream bernama kesatria_numenor yang berisi alamat ketiga worker (Elendil, Isildur, Anarion). Atur agar semua permintaan yang datang ke domain elros..com diteruskan secara merata menggunakan algoritma Round Robin ke backend.
+
+## Script
+
+```
+# 1. Install Nginx
+apt-get update
+apt-get install -y nginx
+
+# 2. === SOAL 10: Configure Load Balancer ===
+cat > /etc/nginx/sites-available/load-balancer << 'EOF'
+# Upstream backend - Kesatria Numenor
+upstream kesatria_numenor {
+    # Round Robin algorithm (default)
+    server elendil.K11.com:8001;
+    server isildur.K11.com:8002;
+    server anarion.K11.com:8003;
+}
+
+server {
+    listen 80;
+    server_name elros.K11.com;
+
+    location / {
+        proxy_pass http://kesatria_numenor;
+        
+        # Proxy headers
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        
+        # Proxy timeouts
+        proxy_connect_timeout 60s;
+        proxy_send_timeout 60s;
+        proxy_read_timeout 60s;
+    }
+
+    # Health check endpoint
+    location /health {
+        access_log off;
+        return 200 "Elros Load Balancer is healthy\n";
+        add_header Content-Type text/plain;
+    }
+
+    access_log /var/log/nginx/elros_access.log;
+    error_log /var/log/nginx/elros_error.log;
+}
+EOF
+
+# 3. Enable Site
+ln -sf /etc/nginx/sites-available/load-balancer /etc/nginx/sites-enabled/
+rm -f /etc/nginx/sites-enabled/default
+
+# 4. Test & Restart
+nginx -t
+service nginx restart
+```
+
+
+<img width="1708" height="266" alt="image" src="https://github.com/user-attachments/assets/65205443-6748-4652-aea6-35c8467047d0" />
+
+<img width="1236" height="278" alt="image" src="https://github.com/user-attachments/assets/1a69d123-5197-49f1-bac0-3f303ff20686" />
+
